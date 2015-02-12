@@ -143,21 +143,52 @@ simplified algorithm development and helps achieve portable performance.
 
 \section{Data Parallel Primitives}
 
-\fix{what they are, how they help}
+\noindent
+Data parallelism is a programming model in which processing elements
+perform the same task on different pieces of data. Data is arranged in long
+vectors, and the base tasks apply an operation across all the entities in
+one or more vectors. Using a sequence of data parallel primitives
+simplifies expressing parallelism in an algorithm and simplifies porting
+across different parallel devices. It takes only a few select data parallel
+primitives to efficiently enable a great number of
+algorithms\lcite{Blelloch1990}.
 
-\fix{discuss Blelloch briefly}
+Scientific visualization algorithms typically use data parallel primitives
+like map, scan, reduce, and sort, which are commonly available in parallel
+libraries\lcite{Thrust,TBB}. Several recent research projects for
+visualization software on next-generation architectures such as Dax,
+PISTON, and EAVL use this data parallel approach to execute
+algorithms\lcite{Sewell2012}. Based on this core similarity, a new project
+is combining their respective strengths in execution and data models to
+form a unified framework named VTK-m.
 
-\fix{DAX/EAVL/PISTON, leading into VTK-m}
+Although the application of data parallel primitives is not always obvious,
+part of the discovery of recent research is that certain patterns of usage
+commonly reoccur in different visualization algorithms. By understanding
+and implementing these patterns, we can accelerate the development of new
+algorithms.
 
 
 \section{Patterns for Data Parallel Visualization}
+
+\noindent
 
 \fix{data parallel primitives in action (focusing on ``re-thinking algs'')}
 
 \fix{show an example of isosurface}
 
+\fix{List of patterns?}
+
+\fix{---stream compaction (PISTON paper)}
+
+\fix{---reverse index lookup (Dax threshold paper)}
+
+\fix{---topology consolidation (topology reduction paper)}
+
 
 \section{Results}
+
+\noindent
 
 \fix{Show ray-tracing results}
 
