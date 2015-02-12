@@ -5,4 +5,5 @@ project(SCFrontiers2015 NONE)
 include(UseLATEX.cmake)
 
 add_latex_document(SCFrontiers2015.tex
+  BIBFILES SCFrontiers2015.bib
   )

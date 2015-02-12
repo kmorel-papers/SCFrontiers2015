@@ -53,8 +53,12 @@
 
 \begin{document}
 
-%\classify{MSC?}
-\author{\fix{I.M.~Scientist}\footnote{\label{susu}South Ural State University}, \fix{U.R.~Author}\footnoteref{susu}}
+%\author{I.M.~Scientist\footnote{\label{susu}South Ural State University}, U.R.~Author\footnoteref{susu}}
+\author{
+  Kenneth Moreland\footnote{Sandia National Laboratories},
+  Hank Childs\footnote{University of Oregon},
+  \fix{others?}
+  }
 
 \title{\fix{Hank's talk title.}}
 
@@ -70,13 +74,72 @@
 \section*{Introduction}
 \label{sec:Introduction}
 
-\fix{slide of doom}
+\noindent
+Although the basic architecture for high-performance computing platforms has
+remained homogeneous and consistent for over a decade, revolutionary changes
+are coming. Power constraints and physical limitations are impelling the
+use of new types of processors, heterogeneous architectures, and deeper
+memory and storage hierarchies. Such drastic changes propagate to the
+design of software that is run on these high-performance computers and how
+we use them.
 
-\fix{push to many-core}
+The predictions for extreme-scale computing are dire.  Recent trends, many
+of which are driven by power budgets, which max out at
+20~MW\lcite{ExascaleArchitecturesReport}, indicate that future
+high-performance computers will have different hardware structure and
+programming models to which software must adapt. The predicted changes from
+petascale to exascale are summarized in
+Table~\ref{table:PetascaleVsExascale} where the performance factor change
+differs up to five orders of magnitude for different components of the
+system.
 
-\fix{current Vis SW inadequate}
+\begin{table}[htdp]
+  \centering
+  \caption{Comparison of a petascale supercomputer to an expected exascale
+    supercomputer\lcite{ScientificDiscoveryExascale2011}.}
+  \label{table:PetascaleVsExascale}
+  \begin{tabular}{@{}lcccc@{}}
+    \toprule
+    & & \multicolumn{2}{c}{Exascale (Prediction)} & \\
+    System Parameter & Petascale & Swim Lane 1 & Swim Lane 2 & Factor Change \\
+    \midrule
+    System Peak & 2~PF & \multicolumn{2}{c}{1~EF} & 500 \\
+    Power & 6~MW & \multicolumn{2}{c}{$\le$20~MW} & 3\\
+    System Memory & 0.3~PB & \multicolumn{2}{c}{32--64~PB} & 100--200 \\ % San Diego report says 50PB
+    Total Concurrency & 225~K & 1~B$\times$10 & 1~B$\times$100 & 40,000--400,000 \\
+    Node Performance & 125~GF & 1~TF & 10~TF & 8--80\\
+    %Node Memory BW & 25~GB/s & 400~GB/s & 4~TB/s & 16 \\
+    Node Core Count & 12 & 1,000 & 10,000 & 83--830 \\
+    Network BW & 1.5~GB/s & 100~GB/s & 1,000~GB/s & 66--660 \\
+    System Size (nodes) & 18700 & 1,000,000 & 100,000 & 50--500 \\
+    I/O Capacity & 15~PB & \multicolumn{2}{c}{300--1,000~PB} & 20--67\\
+    I/O BW & 0.2~TB/s & \multicolumn{2}{c}{20--60~TB/s} & 100--300 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
-\fix{how to get portable performance}
+A particularly alarming feature of Table~\ref{table:PetascaleVsExascale} is
+the increase in concurrency of the system: up to 5 orders of magnitude. We
+currently stand about halfway through the transition from petascale to
+exascale and we can observe this prediction coming to fruition through the
+use of accelerator or many-core processors. In the November 2014 Top500
+supercomputer list, 75 of the computers contain many-core components
+including half of the top 10 computers.
+
+A many-core processor achieves high instruction bandwidth by packing many
+cores onto a single process. To achieve the highest density of cores at the
+lowest possible power requirement, these cores are trimmed of
+latency-hiding features and require careful coordination to achieve peak
+performance. Although very scalable on distributed memory architectures,
+our current parallel scientific visualization tools such as
+VisIt\lcite{VisIt} and ParaView\lcite{ParaView} are inadequate on these
+machines.
+
+Overhauling our software tools is one of the principal visualization
+research challenges today\lcite{Childs2013}. This paper reviews scientific
+visualization using data parallel primitives. This approach enables
+simplified algorithm development and helps achieve portable performance.
+
 
 \section{Data Parallel Primitives}
 
@@ -117,6 +180,6 @@
 
 
 \bibliographystyle{plain}
-%\bibliography{SCFrontiers2015}
+\bibliography{SCFrontiers2015}
 
 \end{document}
