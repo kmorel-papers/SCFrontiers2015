@@ -1,91 +1,122 @@
 \documentclass{superfri}
 
-% ------------
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[cmex10]{amsmath}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{ifthen}
+\usepackage{cite}
+\usepackage{tabulary}
+\usepackage{url}
+\usepackage{xspace}
+\usepackage[pdfborder={0 0 0}]{hyperref}
+\usepackage{verbatim}
 
-\bibliographystyle{plain}
+\usepackage{color}
+\definecolor{yellow}{rgb}{1,1,0}
+\definecolor{black}{rgb}{0,0,0}
+\definecolor{ltcyan}{rgb}{.75,1,1}
+\definecolor{red}{rgb}{1,0,0}
+\definecolor{gray}{rgb}{.6,.6,.6}
+\definecolor{darkred}{rgb}{0.5,0,0}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+
+% Cite commands I use to abstract away the different ways to reference an
+% entry in the bibliography (superscripts, numbers, dates, or author
+% abbreviations).  \scite is a short cite that is used immediately after
+% when the authors are mentioned.  \lcite is a full citation that is used
+% anywhere.  Both should be used right next to the text being cited without
+% any spacing.
+\newcommand*{\lcite}[1]{~\cite{#1}}
+\newcommand*{\scite}[1]{~\cite{#1}}
+
+\newcommand{\etal}{et al.\xspace}
+
+\newcommand*{\keyterm}[1]{\emph{#1}}
+
+\newcommand{\fix}[1]{{\color{red}\textsc{[#1]}}}
+%\newcommand{\fix}[1]{}
+
+% Avoid putting figures on their own page.
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+
+% Make sure this is big enough so that only big figures end up on their own
+% page but small enough so that if a figure does have to be on its own
+% page, it won't push everything to the bottom because it's not big enough
+% to have its own page.
+\renewcommand{\floatpagefraction}{.75}
+
 \begin{document}
 
 %\classify{MSC?}
-\author{I.M.~Scientist\footnote{\label{susu}South Ural State University}, U.R.~Author\footnoteref{susu}}
+\author{\fix{I.M.~Scientist}\footnote{\label{susu}South Ural State University}, \fix{U.R.~Author}\footnoteref{susu}}
 
-\title{SuperFri article template}
+\title{\fix{Hank's talk title.}}
 
 \maketitle{}
 
 \begin{abstract}%
-This template is devoted to helping you format your article the proper way in
-\LaTeX.
+  \fix{Start with Hank's abstract, which I do not have right now.}
 
-\keywords{superfri, template, article formatting}
+  \keywords{scientific visualization, exascale}
 \end{abstract}
 
-% -----------------------------------------------------------------------
+
 \section*{Introduction}
-\label{sec:intro}
-The template demonstrates how to use the \emph{superfri} class. It could be
-used as a basis for your article and meets all the formatting requirements of
-the SuperFri journal. Consult the author
-guidelines\footnote{\url{http://superfri.susu.ac.ru/superfri/about/submissions#authorGuidelines}}
-for details on that matter.
+\label{sec:Introduction}
 
-\section{The class}
+\fix{slide of doom}
 
-\subsection{Installation}
-The class consists of a single file \verb=superfri.cls= which should reside
-along with your manuscript file.
+\fix{push to many-core}
 
-\subsection{Features}
-The class is based on the standard article class and supports all of its
-features, as well as these:
-\begin{itemize}
-\item title and author formatting;
-\item abstract and keywords;
-\item theorems, definitions, and proofs.
-\end{itemize}
+\fix{current Vis SW inadequate}
 
-Begin your paper with the title and authors' names. After filling the
-necessary info in with \verb=\title= and \verb=\author= commands put it all
-together using the \verb=\maketitle= command.
+\fix{how to get portable performance}
 
-Define the structure of your article using up to three levels of nesting with
-the \verb=\section=, \verb=\subsection=, and \verb=\subsubsection= commands.
-You can use the environments \verb=theorem=, \verb=proof=, \verb=lemma=, etc.
-Here are two sample references:
-\cite{Cadez:2000:VNP:347090.347151,Stonebraker:1994:PND:190956.191247}.
+\section{Data Parallel Primitives}
 
-For further directions read the comments in \verb=superfri.cls= as a manual.
+\fix{what they are, how they help}
 
-\subsubsection{Subsubsection title}
+\fix{discuss Blelloch briefly}
 
-The equations look like
+\fix{DAX/EAVL/PISTON, leading into VTK-m}
 
-\begin{equation}
-a^2 + b^2 = c^2 + \int_1^2 x+y \, \mathrm{d}y,
-\end{equation}
 
-where $2$ is a number.
+\section{Patterns for Data Parallel Visualization}
 
-An example of a figure is shown in~\figref{pic-myfigure}, while a table
-is in~\tabref{tab-mytable}.
+\fix{data parallel primitives in action (focusing on ``re-thinking algs'')}
 
-\fig{width=5cm}{pic-myfigure}{An example of a figure}
+\fix{show an example of isosurface}
 
-\tab{tab-mytable}{An example of a table}{
-	\begin{tabular}{rcl}
-	\hline
-	one & two & three \\
-	\hline
-	a & b & c \\
-	$\alpha$ & $\beta$ & $\gamma$ \\
-	$x$ & $y$ & $z$ \\
-	\hline
-	\end{tabular}
+
+\section{Results}
+
+\fix{Show ray-tracing results}
+
+
+\section{Conclusion}
+
+\fix{conclude DPP is viable}
+
+
+\ack{
+  This material is based upon work supported by the U.S. Department of
+  Energy, Office of Science, Office of Advanced Scientific Computing
+  Research, under Award Numbers 10-014707, 12-015215, and 14-017566.
+
+  Sandia National Laboratories is a multi-program laboratory managed and
+  operated by Sandia Corporation, a wholly owned subsidiary of Lockheed
+  Martin Corporation, for the U.S. Department of Energy's National Nuclear
+  Security Administration under contract DE-AC04-94AL85000.
 }
 
-\ack{Put the acknowledgements after the last section, like this.}
 
-\bibliography{template}
-
-%\received{September 25, 2013}
+\bibliographystyle{plain}
+%\bibliography{SCFrontiers2015}
 
 \end{document}
