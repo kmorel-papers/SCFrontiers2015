@@ -2,12 +2,94 @@
 %% http://bibdesk.sourceforge.net/
 
 
-%% Created for kmorel at 2015-02-12 16:26:59 -0700 
+%% Created for kmorel at 2015-03-10 16:52:51 -0600 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@misc{Bell2010,
+	Annote = {A presentation containing several example programs in thrust.  One important one for us (and does not have a lot of other examples) is an implementation of vertex-weld.},
+	Author = {Bell, Nathan},
+	Booktitle = {GPU Technology Conference},
+	Date-Added = {2015-03-10 22:52:49 +0000},
+	Date-Modified = {2015-03-10 22:52:49 +0000},
+	File = {:home/bob/Desktop/Old Ubuntu FS/home/bob/Papers/GPUCoincidentPoints/References/GTC 2010 (Part 1) - High Productivity Development.pdf:pdf},
+	Title = {High-Productivity {CUDA} Development with the Thrust Template Library},
+	Year = {2010}}
+
+@inproceedings{Miller2014,
+	Abstract = {Graphics and visualization pipelines often make use of highly parallelized algorithms which transform an input mesh into an output mesh. One example is Marching Cubes, which transforms a voxel grid into a triangle mesh approximation of an isosurface. These techniques often discard the topological connectivity of the output mesh, and instead produce a 'soup' of disconnected geometric elements. Calculations that require local neighborhood, such as surface curvature, cannot be performed on such outputs without first reconstructing its topology. We present a novel method for reconstructing topological information across several kinds of mesh transformations, which we demonstrate with GPU and OpenMP implementations. Our approach makes use of input topological elements for efficient location of coincident elements in the output. We provide performance data for the technique for isosurface generation, tetrahedralization, subdivision, and dual mesh generation, and demonstrate its use in visualization pipelines containing further computations of local curvature and mesh coarsening.},
+	Annote = {A general pattern to join coincident components created independently by finely decomposed threads. The technique is demonstrated with marching cubes, cell subdivision, and face-centered tetrahedralization. The paper also demonstrates a coarsening technique for marching cubes for free.},
+	Author = {Robert Miller and Kenneth Moreland and Kwan-Liu Ma},
+	Booktitle = {Eurographics Symposium on Parallel Graphics and Visualization},
+	Date-Added = {2015-03-10 22:15:02 +0000},
+	Date-Modified = {2015-03-10 22:15:02 +0000},
+	Note = {{DOI}~10.2312/pgv.20141083},
+	Title = {Finely-Threaded History-Based Topology Computation},
+	Year = {2014},
+	Bdsk-Url-1 = {http://dx.doi.org/10.2312/pgv.20141083},
+	Bdsk-Url-2 = {http://www.sandia.gov/~kmorel/documents/TopologyThreading.pdf}}
+
+@techreport{PISTON,
+	Abstract = {Due to the wide variety of current and next-generation supercomputing architectures, the development of highperformance parallel visualization and analysis operators frequently requires re-writing the underlying algorithms for many different platforms. In order to facilitate portability, we have devised a framework for creating such operators that employs the data-parallel programming model. By writing the operators using only data-parallel primitives (such as scans, transforms, stream compactions, etc.), the same code may be compiled to multiple targets using architecture-specific backend implementations of these primitives. Specifically, we make use of and extend NVIDIA's Thrust library, which provides CUDA and OpenMP backends. Using this framework, we have implemented isosurface, cut surface, and threshold operators, and have achieved good parallel performance on two different architectures (multi-core CPUs and NVIDIA GPUs) using the exact same operator code. We have applied these operators to several large, real scientific data sets, and have open-source released a beta version of our code base.},
+	Annote = {A library providing portable implementations of visualization algorithms on multi- and many-core processors.  Uses Thrust to implement algorithms and portability.  Compares marching cubes isosurface generation to existing implementations by NVIDIA and VTK.
+
+I believe this was presented at EGPGV 2012 and when it becomes available in the proceedings this reference should be updated.
+},
+	Author = {Li-Ta Lo and Chris Sewell and James Ahrens},
+	Date-Added = {2015-03-10 21:25:41 +0000},
+	Date-Modified = {2015-03-10 21:25:41 +0000},
+	Institution = {Los Alamos National Laboratory},
+	Number = {LA-UR-12-10227},
+	Title = {{PISTON}: A Portable Cross-Platform Framework for Data-Parallel Visualization Operators},
+	Year = {2012},
+	Bdsk-Url-1 = {http://viz.lanl.gov/projects/PISTON.html}}
+
+@inproceedings{Moreland2013:UltraVis,
+	Abstract = {As the number of cores in processors increase and accelerator architectures
+are becoming more common, an ever greater number of threads is required to
+achieve full processor utilization. Our current parallel scientific
+visualization codes rely on partitioning data to achieve parallel
+processing, but this approach will not scale as we approach massive
+threading in which work is distributed in such a fine level that each
+thread is responsible for a minute portion of data. In this paper we
+characterize the challenges of refactoring our current visualization
+algorithms by considering the finest portion of work each performs and
+examining the domain of input data, overlaps of output domains, and
+interdependencies among work instances. We divide our visualization
+algorithms into eight categories, each containing algorithms with the same
+interdependencies. By focusing our research efforts to solving these
+categorial challenges rather than this legion of individual algorithms, we
+can make attainable advancement for extreme computing.
+},
+	Annote = {Classifies all (well, most) of the filters in ParaView into catagories based on how they break up data, how they map input to output, and what collective work is done. This paper is meant to serve a basis for the worklet types implemented in Dax.},
+	Author = {Kenneth Moreland and Berk Geveci and Kwan-Liu Ma and Robert Maynard},
+	Booktitle = {Proceedings of Ultrascale Visualization Workshop (to appear)},
+	Date-Added = {2015-03-10 20:02:44 +0000},
+	Date-Modified = {2015-03-10 20:02:44 +0000},
+	Month = {November},
+	Note = {{DOI}~10.1145/2535571.2535591},
+	Title = {A Classification of Scientific Visualization Algorithms for Massive Threading},
+	Year = {2013},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1145/2535571.2535591}}
+
+@article{Stratton2012,
+	Abstract = {A study of the implementation patterns among massively threaded applications for many-core GPUs reveals that each of the seven most commonly used algorithm and data optimization techniques can enhance the performance of applicable kernels by 2 to 10× in current processors while also improving future scalability.},
+	Annote = {A high level article that covers some general techniques on making massively threaded algorithms more efficient.  Techniques include: using structures of arrays (SoA) instead of arrays of structures (AoS), using gathers instead of scatters, group data in small units that fit on cache (tiling), assigning output entries to single threads (privatization), map from output locations to subset of input that effects it (binning), determining the compact layout of an output array when needs of threads is unknown (compaction), and statically balance workload among threads (regularization).},
+	Author = {John A. Stratton and Christopher Rodrigues and I-Jui Sung and Li-Wen Chang and Nasser Anssari and Geng Liu and Wen-mei W. Hwu and Nady Obeid},
+	Date-Added = {2015-03-10 20:02:25 +0000},
+	Date-Modified = {2015-03-10 20:02:25 +0000},
+	Journal = {IEEE Computer},
+	Month = {August},
+	Note = {{DOI}~10.1109/MC.2012.194},
+	Number = {8},
+	Pages = {26--32},
+	Title = {Algorithm and Data Optimization Techniques for Scaling to Massively Threaded Systems},
+	Volume = {48},
+	Year = {2012},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1109/MC.2012.194}}
 
 @inproceedings{Sewell2012,
 	Abstract = {This paper surveys the four software frameworks being developed as part of the visualization pillar of the SDAV (Scalable Data Management, Analysis, and Visualization) Institute, one of the SciDAC (Scientific Discovery through Advanced Computing) Institutes established by the ASCR (Advanced Scientific Computing Research) Program of the U.S. Department of Energy. These frameworks include EAVL (Extreme-scale Analysis and Visualization Library), DAX (Data Analysis at Extreme), DIY (Do It Yourself), and PISTON. The objective of these frameworks is to facilitate the adaptation of visualization and analysis algorithms to take advantage of the available parallelism in emerging multi-core and many-core hardware architectures, in anticipation of the need for such algorithms to be run in-situ with LCF (leadership-class facilities) simulation codes on supercomputers.},

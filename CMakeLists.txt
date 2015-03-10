@@ -4,6 +4,13 @@ project(SCFrontiers2015 NONE)
 
 include(UseLATEX.cmake)
 
+set(images
+  images/ExampleMesh.pdf
+  images/StreamCompaction.pdf
+  images/ReverseLookup.pdf
+  )
+
 add_latex_document(SCFrontiers2015.tex
   BIBFILES SCFrontiers2015.bib
+  IMAGES ${images}
   )

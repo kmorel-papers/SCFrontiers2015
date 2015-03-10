@@ -12,6 +12,7 @@
 \usepackage{tabulary}
 \usepackage{url}
 \usepackage{xspace}
+\usepackage{wrapfig}
 \usepackage[pdfborder={0 0 0}]{hyperref}
 \usepackage{verbatim}
 
@@ -172,18 +173,144 @@ algorithms.
 \section{Patterns for Data Parallel Visualization}
 
 \noindent
+Using data parallel primitives greatly simplifies the process of
+implementing algorithms on highly-threaded machines and makes these
+algorithms performance portable. However, implementing many scientific
+algorithms in terms of data parallel primitives like scan and sort is not
+straightforward. Fortunately, many scientific visualization algorithms
+follow familiar algorithmic structures\lcite{Moreland2013:UltraVis}, and
+common patterns emerge.
 
-\fix{data parallel primitives in action (focusing on ``re-thinking algs'')}
+\begin{wrapfigure}{R}{1.64in}
+  \vspace{-\baselineskip}
+  \includegraphics{images/ExampleMesh}
+  \caption{Mesh for contour algorithm examples.}
+  \label{fig:ExampleMesh}
+  \vspace{-2\baselineskip}
+\end{wrapfigure}
 
-\fix{show an example of isosurface}
+Three very common patterns in scientific visualization are stream
+compaction, reverse index lookup, and topology consolidation. In this
+section we describe these patterns using a Marching-Square-like algorithm
+applied to the simple example mesh shown in Figure~\ref{fig:ExampleMesh}.
 
-\fix{List of patterns?}
+\subsection{Stream Compaction}
 
-\fix{---stream compaction (PISTON paper)}
+\noindent
+One common feature of visualization algorithms is that the size of the
+output might depend on the data values in the input and cannot be
+determined without first analyzing the data. For example, in the mesh of
+Figure~\ref{fig:ExampleMesh} we note that there is no contour in cells 0
+and 2, a single contour line in cells 1, 3, and 5, and two contour lines is
+cell 4. When generating these contour segments in parallel, it is not known
+where to place the results. We could allocate space assuming the worst case
+scenario that every cell has the maximum number of contour segments, but
+that guess tends to be much larger than the actual required memory.
+Instead, we want to pack the result tightly in an array. This process is
+known as \keyterm{stream compaction}. Stream compaction can be performed in
+two data parallel operations, which are demonstrated in
+Figure~\ref{fig:StreamCompaction} (adapted from Lo, Sewell, and
+Ahrens\scite{PISTON}).
 
-\fix{---reverse index lookup (Dax threshold paper)}
+\begin{figure}[htb]
+  \centering
+  \includegraphics{images/StreamCompaction}
+  \caption{Steps to perform the stream compaction pattern using data
+    parallel primitives.}
+  \label{fig:StreamCompaction}
+\end{figure}
 
-\fix{---topology consolidation (topology reduction paper)}
+First, a mapping operation is performed to count the size of the output per
+cell. Second, an exclusive prefix sum (scan) operation is performed. The
+result of the prefix some for each entry is the sum of all output up to
+that point. This sum can be directly used as an index into the compact
+output array. A final map of the per-element algorithm can now run, placing
+its results into the appropriate location of the output array.
+
+\subsection{Reverse Index Lookup}
+
+\noindent
+Directly using the indices from the stream compaction operation results in
+a \keyterm{scatter} operation where each thread takes data from an input
+element and writes to one or more output elements using random access.
+Although the scatter done by the basic stream compaction is functionally
+correct, it is known that current many-core processors tend to perform
+better with \keyterm{gather} operations where each thread is assigned a
+single output element but can access random input
+elements\lcite{Stratton2012}. The steps to reverse the index lookup from a
+scatter to a gather are demonstrated in Figure~\ref{fig:ReverseLookup}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics{images/ReverseLookup}
+  \caption{Steps to perform a reverse lookup after stream compaction using
+    data parallel primitives.}
+  \label{fig:ReverseLookup}
+\end{figure}
+
+We start with an array that maps each input to the location in its
+corresponding output location. However, we generate this output array
+location using an inclusive scan rather than an exclusive scan. This has
+the effect of shifting the array to the left by one to make the indexing of
+the next step work better. The next step is to search for the upper bound
+of the array location for each output element index. The upper bound will
+be the first entry greater than the value we search for. This search
+requires the target array location array to be sorted, which it assuredly
+is because it is generated from a prefix sum. The search for every index
+can be done independently in parallel.
+
+The results from the upper bound give is the reverse map from output index
+to input index. However, a problem that arises is that multiple output
+elements may come from the same input elements but are expected to produce
+unique elements. In this example input cell 4 produces two contour
+elements, so two entries in the input array location map point to that
+cell. How are the threads running on these two cells to know which element
+to produce? We solve this problem by generating what we call a
+\keyterm{visit index}.
+
+The visit indices are generated in two steps. First, we perform a lower
+bound search of each value in the input array location map into the same
+map. The lower bound search finds the last entry less than or equal to the
+value we search for. As before all these searches can be done independently
+in parallel. The result is the index to the first entry in the input array
+location map for the group associated with the same input element. We then
+take this array of indices and subtract them from the output index to get
+a unique index into that group. We call this the visit index. Using the
+pair from input array location map and the visit index, each thread running
+for a single output element can uniquely generate the data it is to
+produce.
+
+\subsection{Topology Consolidation}
+
+\noindent
+Another common occurrence in visualization algorithms is for independent
+threads to redundantly create coincident data. For example, output elements
+0 and 3 from Figures \ref{fig:StreamCompaction} and \ref{fig:ReverseLookup}
+come from cells 1 and 4, respectively, in Figure~\ref{fig:ExampleMesh} and
+share a vertex. This shared vertex is independently interpolated in
+separate threads and the connection of these output elements is lost. It is
+sometimes required to consolidate the topology by finding these coincident
+elements and merging them.
+
+The general approach to topology consolidation is to define a simple hash
+for each element that uniquely identifies the element for all instances.
+That is, two hash values are equal if and only if the associated elements
+are coincident. Once hashes are generated, a sort keyed on the hashes moves
+all coincident elements to be adjacent in the storage arrays. At this point
+it is straightforward to in parallel to designate groups of coincident
+elements and reduce the groups to a single element.
+
+For the specific case of merging vertices, Bell\scite{Bell2010} proposes
+using the point coordinate triple as the hash. However, that approach is
+intolerant to any numerical inaccuracy. A better approach is to use
+integer-based hashes, which can usually be derived from the input topology.
+For example, contour algorithms like Marching Cubes always define contour
+vertices on the edges of the input mesh. These edges (and therefore the
+vertices) can be uniquely defined either by an enumerated index or by the
+pair of indices for the edge's vertex endpoints. Miller, Moreland, and
+Ma\scite{Miller2014} show this approach is faster than using point
+coordinates and can also be applied to topological elements other than
+vertices.
 
 
 \section{Results}
