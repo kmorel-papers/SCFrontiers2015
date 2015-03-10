@@ -316,6 +316,29 @@ vertices.
 \section{Results}
 
 \noindent
+One of the promises of using data parallel primitives to build scientific
+visualization algorithms is performance portability. That is, a single
+implementation using data parallel primitives should work well across
+computing devices with vastly different performance characteristics from
+traditional latency-optimized multi-core CPUs to bandwidth-optimized
+many-core GPUs. Furthermore, portable data parallel primitive
+implementations should have close to the performance of a non-portable
+algorithm designed and optimized specifically for a particular device.
+Recent research indicates that data parallel primitive algorithms are in
+fact quite performance portable.
+
+Maynard \etal\scite{Maynard2013} compare a threshold algorithm written with
+data parallel primitives across many devices. The algorithm shows good
+performance on both multi-core CPU and many-core GPU devices.
+Interestingly, the data parallel primitive algorithm run serially on a
+single CPU core still beats the equivalent VTK implementation.
+
+Lo, Sewell, and Ahrens\scite{PISTON} demonstrate the performance of a
+Marching Cubes algorithm implemented with data parallel primitives. Their
+algorithm is compared with the equivalent CUDA reference implementation
+optimized for that architecture. The two implementations get comparable
+performance. The data parallel primitive implementation is also shown to
+get good performance and scalability on multi-core CPUs.
 
 \fix{Show ray-tracing results}
 
