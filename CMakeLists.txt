@@ -8,6 +8,7 @@ set(images
   images/ExampleMesh.pdf
   images/StreamCompaction.pdf
   images/ReverseLookup.pdf
+  images/rm650_teaser.png
   )
 
 add_latex_document(SCFrontiers2015.tex

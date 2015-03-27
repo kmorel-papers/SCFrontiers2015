@@ -57,12 +57,12 @@
 %\author{I.M.~Scientist\footnote{\label{susu}South Ural State University}, U.R.~Author\footnoteref{susu}}
 \author{
   Kenneth Moreland\footnote{Sandia National Laboratories},
-  Hank Childs\footnote{\label{ou}University of Oregon},
-  Matt Larson\footnoteref{ou}
+  Matthew Larsen\footnote{\label{ou}University of Oregon}, and
+  Hank Childs\footnoteref{ou}
   }
 
 %\title{Visualization for Exascale: Portable Performance is Critical}
-\title{Exascale Visualization: Why Portable Performance Will Change Everything}
+\title{Exascale Visualization: Why Portable Performance Will Change Visualization Software}
 
 \maketitle{}
 
@@ -103,9 +103,10 @@ of which are driven by power budgets, which max out at
 high-performance computers will have different hardware structure and
 programming models to which software must adapt. The predicted changes from
 petascale to exascale are summarized in
-Table~\ref{table:PetascaleVsExascale} where the performance factor change
-differs up to five orders of magnitude for different components of the
-system.
+Table~\ref{table:PetascaleVsExascale}.
+% where the performance factor change
+%differs up to five orders of magnitude for different components of the
+%system.
 
 \begin{table}[htdp]
   \centering
@@ -137,7 +138,7 @@ the increase in concurrency of the system: up to 5 orders of magnitude. We
 currently stand about halfway through the transition from petascale to
 exascale and we can observe this prediction coming to fruition through the
 use of accelerator or many-core processors. In the November 2014 Top500
-supercomputer list, 75 of the computers contain many-core components
+supercomputer list, 75 of the computers contain many-core components,
 including half of the top 10 computers.
 
 A many-core processor achieves high instruction bandwidth by packing many
@@ -145,13 +146,14 @@ cores onto a single process. To achieve the highest density of cores at the
 lowest possible power requirement, these cores are trimmed of
 latency-hiding features and require careful coordination to achieve peak
 performance. Although very scalable on distributed memory architectures,
-our current parallel scientific visualization tools such as
-VisIt\lcite{VisIt} and ParaView\lcite{ParaView} are inadequate on these
-machines.
+our current parallel scientific visualization tools, 
+such as ParaView\lcite{ParaView} and VisIt\lcite{VisIt},
+ are inadequate on these machines.
 
 Overhauling our software tools is one of the principal visualization
-research challenges today\lcite{Childs2013}. This paper reviews scientific
-visualization using data parallel primitives. This approach enables
+research challenges today\lcite{Childs2013}.
+A key strategy has been the use of 
+data parallel primitives, since the approach enables
 simplified algorithm development and helps achieve portable performance.
 
 
@@ -170,17 +172,21 @@ algorithms\lcite{Blelloch1990}.
 Scientific visualization algorithms typically use data parallel primitives
 like map, scan, reduce, and sort, which are commonly available in parallel
 libraries\lcite{Thrust,TBB}. Several recent research projects for
-visualization software on next-generation architectures such as Dax,
-PISTON, and EAVL use this data parallel approach to execute
+visualization software on next-generation architectures such as Dax\lcite{DAX},
+PISTON\lcite{PISTON}, and EAVL\lcite{EAVL} use this data parallel approach to execute
 algorithms\lcite{Sewell2012}. Based on this core similarity, a new project
-is combining their respective strengths in execution and data models to
-form a unified framework named VTK-m.
+--- VTK-m ---
+is combining their respective strengths in execution and data models into
+a unified framework.
 
-Although the application of data parallel primitives is not always obvious,
-part of the discovery of recent research is that certain patterns of usage
-commonly reoccur in different visualization algorithms. By understanding
-and implementing these patterns, we can accelerate the development of new
-algorithms.
+%% \fix{This paragraph seems to be redundant with first paragraph of section 2.
+%% I think it can just be removed, but will let you make the call.}
+
+%% Although the application of data parallel primitives is not always obvious,
+%% part of the discovery of recent research is that certain patterns of usage
+%% commonly reoccur in different visualization algorithms. By understanding
+%% and implementing these patterns, we can accelerate the development of new
+%% algorithms.
 
 
 \section{Patterns for Data Parallel Visualization}
@@ -351,23 +357,85 @@ optimized for that architecture. The two implementations get comparable
 performance. The data parallel primitive implementation is also shown to
 get good performance and scalability on multi-core CPUs.
 
-\fix{Show ray-tracing results}
+But perhaps the most encouraging evidence comes from a recent performance
+study conducted by Larsen \etal\scite{Larsen:PacVis2015} for ray tracing in
+the context of data parallel primitives.
+%
+Ray tracing is a challenging use case since it is computationally
+intense and contains both regular and irregular memory access patterns.
+%
+Moreover, this is an algorithm with ``guaranteed not to exceed''
+standards, in the form of Intel's Embree\scite{wald2014embree} and
+NVIDIA's OptiX\scite{parker2010optix}.
+%
+These products each are supported by teams of developers and have been under
+development for multiple years. 
+%
+Further, they make full use of architectural knowledge, including
+constructs like instrinsics, and tune for 
+Intel and NVIDIA products, respectively.
 
+\begin{wrapfigure}{R}{2.64in}
+  \vspace{-\baselineskip}
+  \includegraphics[width=2.64in]{images/rm650_teaser}
+  \caption{Rendering from ray tracing study on an isosurface of 650,000 triangles.\\}
+  \label{fig:raytracing}
+  \vspace{-\baselineskip}
+\end{wrapfigure}
+Larsen implements his ray tracer within EAVL and provides a performance
+study against OptiX on multiple NVIDIA GPUs and against Embree on Intel Xeon
+and Xeon Phi architectures.  
+%
+His study includes both scientific data sets and standard
+ray tracing data sets (e.g., Stanford dragon).
+%
+Figure~\ref{fig:raytracing} shows one of the scientific data sets.
+
+Encouragingly, the performance comparison finds that the EAVL
+ray tracer is competitive with the industry standards.
+%
+It is within a factor of two on most configurations and does particularly
+well on the scientific data sets.
+%
+In fact, it even outperforms the industry standards on some older
+architectures (since the industry standards tend to focus on 
+the latest architectures).
+%
+
+Overall, this result is encouraging regarding the prospects for portable
+performance with data parallel primitives, in that 
+a single, architecture-agnostic implementation was comparable to two 
+highly-tuned, architecture-specific standards.
+%
+Although the architecture-specific standards are clearly faster, the gap
+is likely acceptable for our use case.
+%
+Further, the data parallel primitive approach is completed by a graduate
+student in a period of months whereas the industry standards take
+experts years (or more); the encumbrence from data parallel
+primitives could be shown to be even smaller given additional effort and expertise.
 
 \section{Conclusion}
 
 \noindent
-As processing changes in high-performance computing, it is critical that we
-maintain effective scientific visualization capabilities. Although there
-are many programming models proposed for these new systems, we believe that
-the use of data parallel primitives is the most expedient mechanism to
-implement our visualization needs on these new architectures. In this paper
-we have demonstrated that it is possible to implement numerous scientific
-visualization algorithms using data parallel primitives as well as provide
-helpful patterns to developers for similar algorithms. Furthermore, we have
-shown that scientific visualization algorithms written with data parallel
-primitives demonstrate performance portability across different multi- and
-many-core architectures.
+Visualization software will need significant changes to excel in
+the exascale era, both to deal with diverse architectures and to 
+deal with massive concurrency within a node.
+%
+Recent results show that data parallel primitives are a promising technology
+to deal with both challenges.
+%
+First, exploration into multiple algorithms have shown recurring
+trends, and will hopefully serve as a precursor to porting many of our
+community's algorithms reusing these same trends.
+%
+Second, studies comparing performance with architecture-specific
+implementations have shown that the performance is very good.
+%
+Researchers in this area --- including the authors of this paper ---
+are so encouraged that they have banded together to form a new effort, 
+VTK-m, in an endeavor to provide production visualization software
+to the HPC community.
 
 \ack{
   This material is based upon work supported by the U.S. Department of
