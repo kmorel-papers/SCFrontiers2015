@@ -57,16 +57,29 @@
 %\author{I.M.~Scientist\footnote{\label{susu}South Ural State University}, U.R.~Author\footnoteref{susu}}
 \author{
   Kenneth Moreland\footnote{Sandia National Laboratories},
-  Hank Childs\footnote{University of Oregon},
-  \fix{others?}
+  Hank Childs\footnote{\label{ou}University of Oregon},
+  Matt Larson\footnoteref{ou}
   }
 
-\title{\fix{Hank's talk title.}}
+%\title{Visualization for Exascale: Portable Performance is Critical}
+\title{Exascale Visualization: Why Portable Performance Will Change Everything}
 
 \maketitle{}
 
 \begin{abstract}%
-  \fix{Start with Hank's abstract, which I do not have right now.}
+  \noindent
+  Researchers face a daunting task to provide scientific visualization
+  capabilities for exascale computing. Of the many fundamental changes we
+  are seeing in HPC systems, one of the most profound is a reliance on new
+  processor types optimized for execution bandwidth over latency hiding.
+  Multiple vendors create such accelerator processors, each with
+  significantly different features and performance characteristics. To
+  address these visualization needs across multiple platforms, we are
+  embracing the use of data parallel primitives that encapsulate highly
+  efficient parallel algorithms that can be used as building blocks for
+  conglomerate visualization algorithms. We can achieve performance
+  portability by optimizing this small set of data parallel primitives
+  whose tuning conveys to the conglomerates.
 
   \keywords{scientific visualization, exascale}
 \end{abstract}
@@ -186,7 +199,7 @@ common patterns emerge.
   \includegraphics{images/ExampleMesh}
   \caption{Mesh for contour algorithm examples.}
   \label{fig:ExampleMesh}
-  \vspace{-2\baselineskip}
+  \vspace{-\baselineskip}
 \end{wrapfigure}
 
 Three very common patterns in scientific visualization are stream
