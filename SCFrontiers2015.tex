@@ -57,8 +57,8 @@
 %\author{I.M.~Scientist\footnote{\label{susu}South Ural State University}, U.R.~Author\footnoteref{susu}}
 \author{
   Kenneth Moreland\footnote{Sandia National Laboratories},
-  Matthew Larsen\footnoteref{ou}, and
-  Hank Childs\footnote{\label{ou}University of Oregon}
+  Matthew Larsen\footnote{\label{ou}University of Oregon}, and
+  Hank Childs\footnoteref{ou}
   }
 
 %\title{Visualization for Exascale: Portable Performance is Critical}
@@ -179,14 +179,14 @@ algorithms\lcite{Sewell2012}. Based on this core similarity, a new project
 is combining their respective strengths in execution and data models into
 a unified framework.
 
-\fix{This paragraph seems to be redundant with first paragraph of section 2.
-I think it can just be removed, but will let you make the call.}
+%% \fix{This paragraph seems to be redundant with first paragraph of section 2.
+%% I think it can just be removed, but will let you make the call.}
 
-Although the application of data parallel primitives is not always obvious,
-part of the discovery of recent research is that certain patterns of usage
-commonly reoccur in different visualization algorithms. By understanding
-and implementing these patterns, we can accelerate the development of new
-algorithms.
+%% Although the application of data parallel primitives is not always obvious,
+%% part of the discovery of recent research is that certain patterns of usage
+%% commonly reoccur in different visualization algorithms. By understanding
+%% and implementing these patterns, we can accelerate the development of new
+%% algorithms.
 
 
 \section{Patterns for Data Parallel Visualization}
@@ -359,19 +359,18 @@ optimized for that architecture. The two implementations get comparable
 performance. The data parallel primitive implementation is also shown to
 get good performance and scalability on multi-core CPUs.
 
-\subsection{Ray Tracing}
-
-Larsen \etal\scite{Larsen:PacVis2015} conducted a noteworthy performance study 
-for ray tracing in the context of data parallel primitives.
+But perhaps the most encouraging evidence comes from a recent performance
+study conducted by Larsen \etal\scite{Larsen:PacVis2015} for ray tracing in
+the context of data parallel primitives.
 %
-Ray tracing is a challenging use case, since it is computationally
+Ray tracing is a challenging use case since it is computationally
 intense and contains both regular and irregular memory access patterns.
 %
-Moreover, this is an algorithm with ``guaranteed not to exceed"
+Moreover, this is an algorithm with ``guaranteed not to exceed''
 standards, in the form of Intel's Embree\scite{wald2014embree} and
 NVIDIA's OptiX\scite{parker2010optix}.
 %
-These products each are supported by teams of develops and have been under
+These products each are supported by teams of developers and have been under
 development for multiple years. 
 %
 Further, they make full use of architectural knowledge, including
@@ -385,22 +384,22 @@ Intel and NVIDIA products, respectively.
   \label{fig:raytracing}
   \vspace{-\baselineskip}
 \end{wrapfigure}
-Larsen implemented his ray tracer within EAVL, and performed a performance
-study against OptiX on multiple NVIDIA GPUs, and against Embree on Intel Xeon
+Larsen implements his ray tracer within EAVL and provides a performance
+study against OptiX on multiple NVIDIA GPUs and against Embree on Intel Xeon
 and Xeon Phi architectures.  
 %
-His study included both scientific data sets and standard
+His study includes both scientific data sets and standard
 ray tracing data sets (e.g., Stanford dragon).
 %
 Figure~\ref{fig:raytracing} shows one of the scientific data sets.
 
-Encouragingly, the performance comparison found that the EAVL 
-ray tracer was competitive with the industry standards.
+Encouragingly, the performance comparison finds that the EAVL
+ray tracer is competitive with the industry standards.
 %
-It was within a factor of two on most configurations, and did particularly
+It is within a factor of two on most configurations and does particularly
 well on the scientific data sets.
 %
-In fact, it even outperformed the industry standards on some older
+In fact, it even outperforms the industry standards on some older
 architectures (since the industry standards tend to focus on 
 the latest architectures).
 %
@@ -410,16 +409,17 @@ performance with data parallel primitives, in that
 a single, architecture-agnostic implementation was comparable to two 
 highly-tuned, architecture-specific standards.
 %
-While the architecture-specific standards were clearly faster, the gap
+Although the architecture-specific standards are clearly faster, the gap
 is likely acceptable for our use case.
 %
-Further, the data parallel primitive approach was done by a graduate
-student in a period of months, while the industry standards were done by
-experts over a period of years (or more); the encumbrence from data parallel
+Further, the data parallel primitive approach is completed by a graduate
+student in a period of months whereas the industry standards take
+experts years (or more); the encumbrence from data parallel
 primitives could be shown to be even smaller given additional effort and expertise.
 
 \section{Conclusion}
 
+\noindent
 Visualization software will need significant changes to excel in
 the exascale era, both to deal with diverse architectures and to 
 deal with massive concurrency within a node.
