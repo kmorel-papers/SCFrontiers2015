@@ -45,20 +45,16 @@
 	Bdsk-Url-1 = {http://dx.doi.org/10.2312/pgv.20141083},
 	Bdsk-Url-2 = {http://www.sandia.gov/~kmorel/documents/TopologyThreading.pdf}}
 
-@techreport{PISTON,
-	Abstract = {Due to the wide variety of current and next-generation supercomputing architectures, the development of highperformance parallel visualization and analysis operators frequently requires re-writing the underlying algorithms for many different platforms. In order to facilitate portability, we have devised a framework for creating such operators that employs the data-parallel programming model. By writing the operators using only data-parallel primitives (such as scans, transforms, stream compactions, etc.), the same code may be compiled to multiple targets using architecture-specific backend implementations of these primitives. Specifically, we make use of and extend NVIDIA's Thrust library, which provides CUDA and OpenMP backends. Using this framework, we have implemented isosurface, cut surface, and threshold operators, and have achieved good parallel performance on two different architectures (multi-core CPUs and NVIDIA GPUs) using the exact same operator code. We have applied these operators to several large, real scientific data sets, and have open-source released a beta version of our code base.},
-	Annote = {A library providing portable implementations of visualization algorithms on multi- and many-core processors.  Uses Thrust to implement algorithms and portability.  Compares marching cubes isosurface generation to existing implementations by NVIDIA and VTK.
+@inproceedings{PISTON,
+    author =    "Lo, Li-ta and Sewell, Christopher and Ahrens, James",
+    title =     "{PISTON}: A Portable Cross-Platform Framework for Data-Parallel
+ Visualization Operators",
+    publisher = "Eurographics Symposium on Parallel Graphics and Visualization",
+    year =      "2012",
+    pages = {11-20},
+    numpages =  "10",
+}
 
-I believe this was presented at EGPGV 2012 and when it becomes available in the proceedings this reference should be updated.
-},
-	Author = {Li-Ta Lo and Chris Sewell and James Ahrens},
-	Date-Added = {2015-03-10 21:25:41 +0000},
-	Date-Modified = {2015-03-10 21:25:41 +0000},
-	Institution = {Los Alamos National Laboratory},
-	Number = {LA-UR-12-10227},
-	Title = {{PISTON}: A Portable Cross-Platform Framework for Data-Parallel Visualization Operators},
-	Year = {2012},
-	Bdsk-Url-1 = {http://viz.lanl.gov/projects/PISTON.html}}
 
 @inproceedings{Moreland2013:UltraVis,
 	Abstract = {As the number of cores in processors increase and accelerator architectures
@@ -79,7 +75,7 @@ can make attainable advancement for extreme computing.
 },
 	Annote = {Classifies all (well, most) of the filters in ParaView into catagories based on how they break up data, how they map input to output, and what collective work is done. This paper is meant to serve a basis for the worklet types implemented in Dax.},
 	Author = {Kenneth Moreland and Berk Geveci and Kwan-Liu Ma and Robert Maynard},
-	Booktitle = {Proceedings of Ultrascale Visualization Workshop (to appear)},
+	Booktitle = {Proceedings of Ultrascale Visualization Workshop},
 	Date-Added = {2015-03-10 20:02:44 +0000},
 	Date-Modified = {2015-03-10 20:02:44 +0000},
 	Month = {November},
@@ -142,6 +138,16 @@ can make attainable advancement for extreme computing.
 	Title = {GPU Computing Gems, Jade Edition},
 	Year = {2011}}
 
+@inproceedings{Larsen:PacVis2015,
+    author = {Matt Larsen and Jeremy Meredith and Paul Navr\'{a}til and Hank Childs},
+    title = {{Ray-Tracing Within a Data Parallel Framework}},
+    booktitle = {Proceedings of the IEEE Pacific Visualization Symposium},
+    month=apr,
+    year ={2015},
+    address = {Hangzhou, China},
+    note = "(to appear)"
+}
+
 @book{Blelloch1990,
 	Abstract = {Vector Models for Data-Parallel Computing describes a model of parallelism that extends and formalizes the Data-Parallel model on which the Connection Machine and other supercomputers are based. It presents many algorithms based on the model, ranging from graph algorithms to numerical algorithms, and argues that data-parallel models are not only practical and can be applied to a surprisingly wide variety of problems, they are also well suited for very-high-level languages and lead to a concise and clear description of algorithms and their complexity. Many of the author's ideas have been incorporated into the instruction set and into algorithms currently running on the Connection Machine.
 
@@ -185,15 +191,35 @@ The book includes the definition of a parallel vector machine; an extensive desc
 	Year = {2015},
 	Bdsk-Url-1 = {http://www.paraview.org}}
 
-@manual{VisIt,
-	Annote = {Dude, it's VisIt.},
-	Date-Added = {2015-02-12 22:05:51 +0000},
-	Date-Modified = {2015-02-12 22:05:51 +0000},
-	Month = {October},
-	Note = {Technical Report UCRL-SM-220449},
-	Organization = {Lawrence Livermore National Laboratory},
-	Title = {VisIt User's Manual},
-	Year = {2005}}
+
+@inproceedings{DAX,
+author = {Kenneth Moreland and Utkarsh Ayachit and Berk Geveci and Kwan-Liu Ma},
+title = {{Dax Toolkit: A Proposed Framework for Data Analysis and Visualization at Extreme Scale}},
+booktitle = {Proceedings of the IEEE Symposium on Large-Scale Data Analysis and Visualization},
+month = {October},
+pages = {97--104},
+year = {2011}
+}
+
+
+@inproceedings{EAVL,
+        title = {{EAVL:} The Extreme-scale Analysis and Visualization Library},
+        isbn = {3905674351},
+        booktitle = {Eurographics Symposium on Parallel Graphics and Visualization},
+        publisher = {The Eurographics Association},
+        author = {Meredith, J. S. and Ahern, S. and Pugmire, D. and Sisneros, R.},
+        year = {2012},
+        pages = {21--30}
+}
+
+@InCollection{VisIt,
+  author = {Hank Childs and Eric Brugger and Brad Whitlock and Jeremy Meredith and Sean Ahern and David Pugmire and Kathleen Biagas and Mark Miller and Cyrus Harrison and Gunther H. Weber and Hari Krishnan and Thomas Fogal and Allen Sanderson and Christoph Garth and E. Wes Bethel and David Camp and Oliver R\"{u}bel and Marc Durant and Jean M. Favre  and Paul Navr\'{a}til},
+  title = {{VisIt: An End-User Tool For Visualizing and Analyzing Very Large Data}},
+   year =      "2012",
+   pages = "357--372",
+  month = oct,
+  booktitle = {{High Performance Visualization---Enabling Extreme-Scale Scientific \linebreak Insight}},
+}
 
 @misc{ScientificDiscoveryExascale2011,
 	Annote = {Workshop report on upcoming visualization challenges at exascale.  Big challenges include overcoming lower relative I/O rates through various more advanced I/O technologies such as in situ computations.  Also includes discussion on upcoming algorithmic challenges.},
@@ -216,3 +242,23 @@ The book includes the definition of a parallel vector machine; an extensive desc
 	Title = {Architectures and Technology for Extreme Scale Computing},
 	Year = {2009},
 	Bdsk-Url-1 = {http://science.energy.gov/~/media/ascr/pdf/program-documents/docs/Arch_tech_grand_challenges_report.pdf}}
+
+
+@inproceedings{parker2010optix,
+  title={Optix: a general purpose ray tracing engine},
+  author={Parker, Steven G and others},
+  booktitle={ACM Transactions on Graphics (TOG)},
+  volume={29},
+  number={4},
+  pages={66},
+  year={2010},
+  organization={ACM}
+}
+
+@article{wald2014embree,
+  title={Embree: A Kernel Framework for Efficient CPU Ray Tracing},
+  author={Wald, Ingo and Woop, Sven and Benthin, Carsten and Johnson, Gregory S and Ernst, Manfred},
+  journal = {ACM Transactions on Graphics (proceedings of SIGGRAPH)},
+  year={2014}
+}
+
