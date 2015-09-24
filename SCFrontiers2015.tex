@@ -81,7 +81,8 @@
   portability by optimizing this small set of data parallel primitives
   whose tuning conveys to the conglomerates.
 
-  \keywords{scientific visualization, exascale}
+  \keywords{scientific visualization, exascale, performance portability,
+    data parallel primitives}
 \end{abstract}
 
 
@@ -125,6 +126,7 @@ Table~\ref{table:PetascaleVsExascale}.
     Node Performance & 125~GF & 1~TF & 10~TF & 8--80\\
     %Node Memory BW & 25~GB/s & 400~GB/s & 4~TB/s & 16 \\
     Node Core Count & 12 & 1,000 & 10,000 & 83--830 \\
+    Node Concurrency & 12 & 10,000 & 1,000,000 & 830--83,000 \\
     Network BW & 1.5~GB/s & 100~GB/s & 1,000~GB/s & 66--660 \\
     System Size (nodes) & 18700 & 1,000,000 & 100,000 & 50--500 \\
     I/O Capacity & 15~PB & \multicolumn{2}{c}{300--1,000~PB} & 20--67\\
@@ -241,7 +243,7 @@ Ahrens\scite{PISTON}).
 
 First, a mapping operation is performed to count the size of the output per
 cell. Second, an exclusive prefix sum (scan) operation is performed. The
-result of the prefix some for each entry is the sum of all output up to
+result of the prefix sum for each entry is the sum of all output up to
 that point. This sum can be directly used as an index into the compact
 output array. A final map of the per-element algorithm can now run, placing
 its results into the appropriate location of the output array.
@@ -278,7 +280,7 @@ requires the target array location indices to be sorted, which it assuredly
 is because it is generated from a prefix sum. The search for every index
 can be done independently in parallel.
 
-The results from the upper bound give is the reverse map from output index
+The results from the upper bound give the reverse map from output index
 to input index. However, a problem that arises is that multiple output
 elements may come from the same input elements but are expected to produce
 unique results. In this example input cell 4 produces two contour
@@ -289,8 +291,9 @@ to produce? We solve this problem by generating what we call a
 
 The visit indices are generated in two steps. First, we perform a lower
 bound search of each value in the input array location map into the same
-map. The lower bound search finds the last entry less than the value we
-1parallel. The result is the index to the first entry in the input array
+map. The lower bound search finds the last entry less than or equal to the
+value we search for in
+parallel. The result is the index to the first entry in the input array
 location map for the group associated with the same input element. We then
 take this array of indices and subtract them from the output index to get a
 unique index into that group. We call this the visit index. Using the pair
@@ -314,8 +317,8 @@ for each element that uniquely identifies the element for all instances.
 That is, two hash values are equal if and only if the associated elements
 are coincident. Once hashes are generated, a sort keyed on the hashes moves
 all coincident elements to be adjacent in the storage arrays. At this point
-it is straightforward to in parallel designate groups of coincident
-elements and reduce the groups to a single element.
+it is straightforward to designate groups of coincident
+elements and reduce the groups to a single element in parallel.
 
 For the specific case of merging vertices, Bell\scite{Bell2010} proposes
 using the point coordinate triple as the hash. However, that approach is
@@ -372,7 +375,7 @@ These products each are supported by teams of developers and have been under
 development for multiple years. 
 %
 Further, they make full use of architectural knowledge, including
-constructs like instrinsics, and tune for 
+constructs like intrinsics, and tune for
 Intel and NVIDIA products, respectively.
 
 \begin{wrapfigure}{R}{2.64in}
