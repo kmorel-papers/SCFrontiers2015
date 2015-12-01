@@ -156,7 +156,7 @@ through the use of accelerator or many-core processors. In the November
 components, including half of the top 10 computers.
 
 A many-core processor achieves high instruction bandwidth by packing many
-cores onto a single process. To achieve the highest density of cores at the
+cores onto a single processor. To achieve the highest density of cores at the
 lowest possible power requirement, these cores are trimmed of
 latency-hiding features and require careful coordination to achieve peak
 performance. Although very scalable on distributed memory architectures,
@@ -297,8 +297,8 @@ The results from the upper bound give the reverse map from output index
 to input index. However, a problem that arises is that multiple output
 elements may come from the same input elements but are expected to produce
 unique results. In this example input cell 4 produces two contour
-elements, so two entries in the input array location map point to that
-cell. How are the threads running on these two cells to know which element
+elements, two entries in the output array point to the same input cell.
+How are the two threads running on the same input cell to know which element
 to produce? We solve this problem by generating what we call a
 \keyterm{visit index}.
 
